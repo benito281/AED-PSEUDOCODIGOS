@@ -1,3 +1,31 @@
+Un local de comidas posee información de las facturas emitidas en dos secuencias de caracteres.Desarrolle un algoritmo en pseudocódigo que procese ambas secuencias para crear una nueva secuencia que combine la información de las facturas y los detalles de forma alternada según se indique. El formato de las secuencias es el siguiente:
+Secuencia Facturas:
+	CodigoFactura: 5 dígitos numéricos
+	FechaEmision: 8 caracteres en formato aaaammdd
+	TipoFactura: “A”, “B”, o “C”
+	Nombre o razón social del cliente: cantidad indefinida de caracteres hasta la marca #
+	CUIT/CUIL: 11 caracteres numéricos
+Ejemplo:
+55467  20240321  A  JuanPerez  #  27327831234  47856  20240401 B JuanaPerez # 27415831233
+
+Secuencia detalle factura:
+	CodigoProducto: 6 caracteres alfanuméricos
+	Descripcion: caracteres alfanumericos indefinidos
+	Cantidad: un dígito del 1 al 9
+	PrecioUnitario: 3 dígitos numéricos (es siempre un valor entero) 
+	Termina el detalle de una factura en “!”
+Ejemplo:
+A1B24B  JugoNaranja  2 080 AA554B  Medialunas  6120 ! B21B24 Cereal 5 125 !
+
+Se pide:
+*Secuencia con el CUIT/CUIL y códigos de productos de todas las facturas emitidas en el mes de junio, sin importar el año
+*Por factura informar la cantidad total de artículos comprados, sin diferenciar qué producto es
+*Secuencia de salida de enteros y monto total de todas las facturas tipo A
+*Porcentaje de facturas tipo A emitidas
+*Secuencia de salida con Nombre del cliente seguido del código y descripción de cada artículo comprado. Separar cada cliente con una marca “/”
+*Contar cantidad de artículos vendidos de todos los artículos cuyos códigos comienzan con un carácter ingresado por el usuario. 
+
+
 Accion Facturas es
 	Ambiente
 		Factura:secuencia de caracteres
