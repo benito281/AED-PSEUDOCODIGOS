@@ -1,0 +1,115 @@
+Accion Facturas es
+	Ambiente
+		Factura:secuencia de caracteres
+		f:caracter
+		Detalles:secuencia de caracteres
+		d:caracter
+
+		Cuit:secuencia de caracteres
+		Montos:secuencia de enteros
+		Clientes:secuencia de caracteres
+
+		importe:entero
+		ventas:entero
+		ventas_A:entero
+		tipo_A:boolean
+		i:entero
+		fecha:caracter
+		codigo_usuario:caracter
+		codigo:entero
+
+		nro="0","1","2","3","4","5","6","7","8"."9"
+		FUNCION convertidor(v:caracter):entero
+	        SEGUN v HACER
+	            ="0": convertidor:=0
+	            ="1": convertidor:=1
+	            ="2": convertidor:=2
+	            ="3": convertidor:=3
+	            ="4": convertidor:=4
+				="5": convertidor:=5
+	            ="6": convertidor:=6
+	            ="7": convertidor:=7
+	            ="8": convertidor:=8
+	            ="9": convertidor:=9
+	        FIN_SEGUN
+       	fin funcion
+
+    Proceso
+    Arr(Factura)
+    Arr(Detalles)
+    Crear(Montos)
+    Crear(Clientes)
+    Crear(Cuit)
+    Avz(Factura,f)
+    Avz(Detalles,d)
+    ventas:=0
+    ventas_A:=0
+    codigo:entero
+    Esc("Ingrese primer caracter que desea buscar")
+    Leer(codigo_usuario)
+    Mientras NFDS(Factura) hacer
+    	para i :=1 hasta 10 hacer
+    		Avz(Factura,f)
+    	fin para
+    	fecha:=f
+    	para i:=1 hasta 3 hacer
+    		Avz(Factura,f)
+    	fin para
+    	Si f ="A" entonces
+    		tipo_A:=verdadero
+    	si no
+    		tipo_A:=falso
+    	fin si
+    	Avz(Factura,v)
+    	Mientras f <> "#" hacer
+    		Grabar(Clientes,f)
+    		Avz(Factura,f)
+    	fin mientras
+    	Avz(Factura,f)
+    	Para i:=1 hasta 11 hacer
+    		Si fecha="6" hacer
+    			Grabar(Cuit,f)
+    		fin si
+    		Avz(Factura,f)
+    	fin para
+    	Mientras d <> "!" hacer
+    		Si d = codigo_usuario entonces
+    			codigo:=codigo+1
+    		fin si
+    		Para i:=1 hasta 6 hacer
+    			Si fecha="6" hacer
+    				Grabar(Cuit,d)
+    			fin si
+    			Grabar(Cliente,d)
+    			Avz(Detalles,d)
+    		fin para
+    		Mientras d <> nro hacer
+    			Grabar(Cliente,d)
+    			Avz(Detalles,d)
+    		fin mientras
+    		Grabar(Clientes,"/")
+    		Ventas:=Ventas + convertidor(d)
+    		Si tipo_A entonces
+    			Ventas_A:=Ventas_A+convertidor(d)
+    		fin si
+    		Avz(Detalles,d)
+    		importe:=0
+    		importe:=importe+convertidor(d)*100
+    		Avz(Detalles,d)
+    		importe:=importe+convertidor(d)*10
+    		Avz(Detalles,d)
+    		importe:=importe+convertidor(d)
+    		Avz(Detalles,d)
+    		Grabar(Monto,importe)
+    	fin mientras
+    	Avz(Detalles,d)
+    fin mientras
+    Cerrar(Factura)
+    Cerrar(Detalles)
+    Cerrar(Montos)
+    Cerrar(Cuit)
+    Cerrar(Clientes)
+    Esc("Cantidad total de ventas:"ventas)
+    Esc("Porcentaje de ventas tipo A"i:=(ventas_A*100) div ventas)
+    Esc("Cantidad de codigos de producto que comienzan con "codigo_usuario":"codigo)
+fin accion
