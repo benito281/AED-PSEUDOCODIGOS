@@ -1,0 +1,37 @@
+Ejercicio extra
+Desarrollar una subacción que transforme cada dígito de un número, ingresado por el usuario, en los caracteres equivalentes. Además, se pide desarrollar un algoritmo, que use la subacción, y almacene estos caracteres en una secuencia de salida, al terminar un número separar con el carácter “#”. Agregue los parámetros que considere necesario .
+
+Descomponer y transformar el numero 1289 a caracteres y almacenarlo en orden en una secuencia de salida:
+
+Accion Extra es
+  Ambiente
+    Sec:secuencia de caracteres
+
+    nro=1289
+    valor:entero
+
+    FUNCION convertidor(v:entero):caracter
+	        SEGUN v HACER
+	            =0: convertidor:="0"
+	            =1: convertidor:="1"
+	            =2: convertidor:="2"
+	            =3: convertidor:="3"
+	            =4: convertidor:="4"
+				      =5: convertidor:="5"
+	            =6: convertidor:="6"
+	            =7: convertidor:="7"
+	            =8: convertidor:="8"
+	            =9: convertidor:="9"
+	        FIN_SEGUN
+       	fin funcion
+  Proceso
+  valor:=nro div 1000
+  Grabar(Sec,convertidor(valor))
+  valor:=(nro div 100)-10
+  Grabar(Sec,convertidor(valor))
+  valor:=(nro div 10)-120
+  Grabar(Sec,convertidor(valor))
+  valor:=nro mod 10
+  Grabar(Sec,convertidor(valor))
+  Cerrar(Sec)
+Fin accion
