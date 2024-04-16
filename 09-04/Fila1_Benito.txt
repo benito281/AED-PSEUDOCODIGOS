@@ -1,0 +1,78 @@
+FILA 1
+ACCION sec_facturas ES
+    AMBIENTE
+      facturas, detallesFacturas, salida : secuencia de caracteres;
+      
+      fact, detalle ,resFact1,
+      resFact2,resFact3,resFact4,
+      resFact5, resMes1,resMes2 : caracter;
+      
+     PROCEDIMIENTO ResguardoCodigoFact() ES
+        PARA i := 1 HASTA 4 HACER
+            SEGUN (i) HACER
+                1 : resFact1 := fact; 
+                2 : resFact2 := fact;
+                3 : resFact3 := fact;
+                4 : resFact4 := fact;
+            FIN_SEGUN
+            AVANZAR(facturas,fact);
+        FIN_PARA
+        resFact4 := fact;
+
+         resFact1 := fact;
+         AVANZAR(facturas,fact);
+         resFact2 := fact;
+         AVANZAR(facturas,fact);
+         resFact3 := fact;
+         AVANZAR(facturas,fact);
+         resFact4 := fact;
+         AVANZAR(facturas,fact);
+         resFact5 := fact;
+         AVANZAR(facturas,fact);
+     FIN_PROCEDIMIENTO
+
+     PROCEDIMIENTO InicializarVariables() ES
+        resFact1 := ""; resFact2 := ""; resFact3 := "";
+        resFact4 := ""; resFact5 := ""; resMes1 := ""; resMes2 := "";
+     FIN_PROCEDIMIENTO
+
+    PROCEDIMIENTO GuardarCodigoFact(a,b,c,d,e : caracter) ES
+        ESCRIBIR(salida,a);
+        ESCRIBIR(salida,b);
+        ESCRIBIR(salida,c);
+        ESCRIBIR(salida,d);
+        ESCRIBIR(salida,e);
+    FIN_PROCEDIMIENTO
+
+    PROCEDIMIENTO GuardarCodigoProd() ES
+        PARA i := 1 HASTA 5 HACER
+            ESCRIBIR(salida,detallesFacturas);
+            AVANZAR(detallesFacturas,detalle); //Guarda y avanza el codigo del producto
+        FIN_PARA
+
+    FIN_PROCEDIMIENTO
+PROCESO
+    ARRANCAR(facturas);
+    ARRANCAR(detallesFacturas);
+
+    CREAR(salida);
+
+    InicializarVariables(); 
+
+    AVANZAR(facturas,fact);
+    AVANZAR(detallesFacturas,detalle);
+
+    MIENTRAS (NFDS(facturas)) HACER
+        ResguardoCodigoFact();
+        PARA i := 1 HASTA 4 HACER
+            AVANZAR(facturas, fact); //Avanza el año hasta el primer digito del mes
+        FIN_PARA
+        resMes1 := fact;
+        AVANZAR(facturas, fact);
+        resMes2 := fact;
+        SI (resMes1 = '0' Y resMes2 = '6') ENTONCES
+            GuardarCodigoFact(resFact1, resFact2, resFact3, resFact4, resFact5); 
+        FIN_SI
+
+    FIN_MIENTRAS
+FIN_ACCION.

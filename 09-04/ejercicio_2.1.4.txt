@@ -1,0 +1,36 @@
+ACCION 2.1.4 ES
+    AMBIENTE
+        sec1,sec2, salida : secuencia de caracteres;
+        v1,v2 : caracter;
+PROCESO
+
+    ARRANCAR(sec1); 
+    ARRANCAR(sec2);
+
+    CREAR(salida);
+    AVANZAR(sec1,v1);
+    AVANZAR(sec2,v2);
+
+    MIENTRAS (NFDS(sec1) O NFDS(sec2)) HACER
+        ESCRIBIR(salida,v1);
+        ESCRIBIR(salida,v2);
+        AVANZAR(sec1,v1);
+        AVANZAR(sec2,v2);
+    FIN_MIENTRAS
+
+    MIENTRAS (NFDS(sec1)) HACER
+        ESCRIBIR(salida,v1);
+        AVANZAR(sec1,v1);
+    FIN_MIENTRAS
+
+    MIENTRAS (NFDS(sec2)) HACER
+        ESCRIBIR(salida,v2);
+        AVANZAR(sec12,v2);
+    FIN_MIENTRAS
+
+    CERRAR(salida);
+    CERRAR(sec1);
+    CERRAR(sec2);
+
+FIN_ACCION.
+
