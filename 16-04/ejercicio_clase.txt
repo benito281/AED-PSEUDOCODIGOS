@@ -1,0 +1,33 @@
+ACCION supermercado ES
+    AMBIENTE
+        nroCaja, cantidadProductos, ventasCajero, codBarrra : entero;
+        total, promedioCompra : real;
+        apiNomb : alfanúmerico;
+        dni : N(8);
+
+        PROCEDIMIENTO CalculoProductos() ES
+            PARA i := 1 HASTA cantidad ACER
+                ESCRIBIR('ingrese producto');
+                LEER(codBarrra);
+
+                
+            FIN_PARA
+        FIN_PROCEDIMIENTO
+
+        PROCEDIMIENTO Cabecera() ES
+            
+        FIN_PROCEDIMIENTO
+
+        PROCEDIMIENTO DetalleCompra() ES
+            
+        FIN_PROCEDIMIENTO
+PROCESO
+    ESCRIBIR('Introduzca nro de caja');
+    LEER(nroCaja);
+    ESCRIBIR('Apellido y Nombre del cajero');
+    LEER(apiNomb);
+    ESCRIBIR('Ingrese cantidad de productos');
+    LEER(cantidadProductos);
+
+
+FIN_ACCION.
