@@ -1,0 +1,45 @@
+CONSIGNA : https://aed-frre.github.io/practica/2.21/#ejercicio-214
+
+	1. Analice y responda: 
+	Que pasaría en el caso de que una secuencia de entrada termine antes que la otra? se podría cumplir con la consigna?
+	Habría un error y no podría cumplir la consigna.
+	
+	2. ¿Cómo modificaría el algoritmo en el caso de que solicite contar la cantidad de caracteres de cada secuencia
+	y mostrar por pantalla al final del proceso?
+
+ACCION 2.1.4 ES
+	AMBIENTE
+	secCaracteres, secNumeros, salida : secuencia de caracteres;
+	v1, v2 : caracter;
+	
+PROCESO 
+	ARRANCAR(secCaracteres);
+	ARRANCAR(secNumeros);
+	CREAR(salida);
+	
+	AVANZAR(secCaracteres, v1);
+	AVANZAR(secNumeros, v2);
+	
+	MIENTRAS NFDS(secCaracteres) o NFDS(secNumeros) HACER
+		ESCRIBIR(salida, v1);
+		ESCRIBIR(salida, v2);
+		
+		AVANZAR(secCaracteres, v1);
+		AVANZAR(secNumeros, v2);
+	FIN_MIENTRAS
+	
+	//En caso de no terminar alguna secuencia
+	MIENTRAS NFDS(secCaracteres) HACER
+		ESCRIBIR(salida, v1);
+		AVANZAR(salida, v1);
+	FIN_MIENTRAS
+	
+	MIENTRAS NFDS(secNumeros) HACER
+		ESCRIBIR(salida, v2);
+		AVANZAR(salida, v2);
+	FIN_MIENTRAS
+	
+	CERRAR(salida);
+	CERRAR(secCaracteres);
+	CERRAR(secNumeros);
+FIN_ACCION. 
