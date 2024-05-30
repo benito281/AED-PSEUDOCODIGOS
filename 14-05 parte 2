@@ -1,0 +1,98 @@
+Accion 14-05_N2 es
+	Ambiente
+		Banco=registro
+			clave=registro
+				nro_cliente:entero
+				nro_cuenta:entero
+				nro_deposito:entero
+			fin registro
+			fecha=registro
+				anio:N(4)
+				mes:1..12
+				dia:1..31
+			fin registro
+			capital_inicial:entero
+			capital_interes:entero
+		fin registro
+
+		Vencido=registro
+			nro_cliente:entero
+			nro_cuenta:entero
+			nro_deposito:entero
+			capital_interes:entero
+		fin registro
+
+		Plazos:archivo de Banco ordenado por clave
+		v:Banco
+
+		Sal:archivo de Vencidos
+		s:Vencidos
+
+		cant_plazos:entero
+		total_pazos:entero
+		capital_si:entero
+		capital_i:entero
+		total_capital:entero
+		promedio:entero
+
+		reg_cliente:entero
+		reg_cuenta:entero
+
+		Procedimeinto Corte_Cuenta ()
+			Esc("La cantidad de plazos de la cuenta:" reg_cuenta "es de" cant_plazos)
+			Esc("El total de capital sin interes es de :" capital_si)
+			total_plazos:=total_plazos+ cant_plazos
+			total_capital:=total_capital + capital_si
+			cant_plazos:=0
+			capital_si:=0
+			reg_cuenta:=v.nro_cuenta
+		fin procedimiento
+
+		Procedimiento Corte_Cliente()
+			Corte_Cuenta()
+			Esc("El numero de plazos del cliente " reg_cliente " es de:" total_plazos)
+			esc("El total a pagar al cliente es de:" total_capital)
+			promedio:= capita_i div total_plazos
+			Esc("El promedio de capital inicial es de:" promedio)
+			total_capital:=0
+			total_plazos:=0
+			capital_i=0
+			reg_cliente:=v.nro_cliente
+		fin procedimiento
+
+	Proceso
+		Abrir E/(Plazos)
+		Abrirr/S(Sal)
+		Leer(Plazos,v)
+		cant_plazos:=0
+		total_pazos:=0
+		capital_si:=0
+		total_capital:=0
+		promedio:=0
+		capital_i:=0
+		reg_cliente:=v.nro_cliente
+		reg_cuenta:=v.nro_cuenta
+		Meintras NFDA(Plazos) hacer
+			Si v.nro_clientes <> reg_clientes entonces
+				Corte_Cliente()
+			si no
+				Si v.nro_cuenta <> reg_cuenta entonces
+					Corte_Cuenta()
+				fin si
+			fin si
+			Si v.fecha = fecha_actua() entoces
+				s.nro_cliente:=v.nro_cliente
+				s.nro_cuenta:=v.nro_cuenta
+				s.nro_deposito:=v.nro_deposito
+				s.capital_interes:=v.capital_interes
+				Grabar(Sal,s)
+			fin si
+			cant_plazos:=cant_plazo +1
+			capital_i:=cappital_i + v.capital_inicial
+			capital_si:=v.capital_interes - v.capital_interes
+			Leer(Plazos,v)
+		fin mientras
+		Corte_Cliente()
+		Cerrar(Sal)
+		Cerrar(Plazos)
+fin accion
