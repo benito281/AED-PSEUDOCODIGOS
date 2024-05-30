@@ -1,0 +1,81 @@
+El sector Farmacia de un importante Hospital cuenta con un archivo secuencial con datos de todos los medicamentos que posee:
+STOCK_MEDICAMENTOS (ordenado por Categoría, NroLote,  IdMedicamento)
+Categoría
+NroLote
+IdMedicamento
+Stock
+FechaVencimiento
+
+ En donde el campo categoría indica:
+“I”: Presumiblemente seguro
+“II”: Produce efectos adversos, leves o moderados.
+“III”: Produce efectos adversos, graves o potencialmente peligrosos.
+Se desea mostrar un reporte con las estadísticas de cantidad de medicamentos próximos a vencer por categorías de la siguiente manera:
+
+Para determinar los medicamentos próximos a vencer , existe una función proximoAVencer() que recibe como parámetro un número de Lote, e indica Verdadero o Falso si es que el mismo se encuentra próximo a vencer
+
+
+Accion 14/5 es
+	Ambiente
+		Medicamentos=registros
+			clave=registro
+				categoria:{1,2,3}
+				nro_lote:entero
+				id_med:entero
+			fin registro
+			stock:entero
+			fecha_vencimiento:fecha
+		fin registro
+
+		feha=regitro
+			anio:N(4)
+			mes:1..12
+			dia1..31
+		fin fecha
+
+		Stock:archivo de Medicamentos ordenado por clave
+		v:Medicamentos
+
+		reg_cat:{1,2,3}
+
+		cant_vencidos:entero
+		cant_no_vencidos:entero
+		total_vencidos:entero
+		total_no_vencidos
+
+		Procedimiento Corte_Cat es
+			Esc("Total de medicamentos de categoria", reg_cat "vencidos:",cant_vencidos)
+			Esc("Total de medicamentos de categoria", reg_cat "no vencidos:", cant_no_vencidos)
+			Tota_vencidos:=cant_vencidos + Total_vencidos
+			Total_no_vencidos:= cant_no_vencidos + Total_no_vencidos
+			cant_vencidos:=0
+			cant_no_vencidos:=0
+			reg_cat:=v.categoria
+		fin procedimiento
+
+	Proceso
+		Abrir E/(Stock)
+		Leer(Stock,v)
+		reg_cat:=v.categoria
+		cant_vencidos:=0
+		cant_no_vencidos:=0
+		total_vencidos:=0
+		total_no_vencidos:=0
+		Mientras NFDS(Stock) hacer
+			Si v.categoria <> reg_cat entonce
+				Corte_Cat()
+			fin si
+			Si proximoAVencer(v.nro_lote) entonce
+				cant_vencido:=cant_vencido +1
+			sino
+				cant_no_vencido:=cant_no_vencido +1
+			fin si
+			Leer(Stock,v)
+		fin mientras
+		Corte_Cat()
+		Esc("El total de medicamentos vencidos es de :" Total_vencidos)
+		Esc("El total de medicamentos no vencidos es de :" Total_no_vencidos)
+		Total_vencido:=Total_vencidos +Total_no_vencidos
+		Esc("El Total de medicamentos es :"Total_vencidos)
+		Cerrar(Stock)
+fin accion
