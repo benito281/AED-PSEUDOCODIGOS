@@ -1,0 +1,80 @@
+Accion 21/5_NL_1 es
+	Ambiente
+		UTN=registro
+			clave=registro
+				facultad:AN(30)
+				tema:AN(20)
+				curso:AN(10)
+				turno:{"M","T","N"}
+				fecha_inicio:fecha
+				id_curso:entero
+			fin registro
+			duracion:entero
+			cupo:entero
+			cant_inscriptos:entero
+		fin registro
+
+		Alumnos:regsitro de UTN ordenado por clave
+		v:UTN
+
+		cant_facultad:entero
+		cant_tema:entero
+		cant_curso:entero
+
+		total:entero
+
+		reg_facultad:AN(30)
+		reg_tema:AN(20)
+		reg_curso:AN(10)
+
+		Procedimeinto Corte_Facultad()
+			Corte_Tema()
+			Esc("La canteide de alumnos inscriptos esn la facultad:" reg_facultad " es de:" cant_facultad)
+			total:=total +cant_facultad
+			cant_facultad:=0
+			reg_facultad:=v.facultad
+		fin registro
+
+		Procedimiento Corte_Tema()
+			Corte_Curso()
+			Esc("El total de inscriptos en el tema:" reg_tema "es de : "cant_tema)
+			cant_facultad:=cant_facultad +cant_tema
+			cant_tema:=0
+			reg_tema:=v.tema
+		fin procedimiento
+
+		Procedimiento Cort_Curso()
+			Esc("El total de alumnos inscriptos en el curso:"reg_curso "es de :"cant_curso)
+			cant_tema:=cant_curso + cant_tema
+			cant_curso:=0
+			reg_curso:=v.curso
+		fin procedimiento
+
+	Proceso
+		Abrir /E(Alumnos)
+		Leer(Alumnos,v)
+		cant_facultad:=0
+		cant_tema:=0
+		cant_curso:=0
+		total:=0
+		reg_facultad:=v.facultad
+		reg_tema:=v.tema
+		reg_curso:=v.curso
+		Mientras NFDA(Alumnos) hacer
+			Si v.facultad <> reg_facultad entonces
+				Corte_Facultad()
+			si no
+				Si v.tema <> reg_tema entonces
+					Corte_Tema()
+				si no
+					Si v.curso <> reg_curso entonces
+						Corte_Curso()
+					fin si
+				fin si
+			fin si
+			cant_curso:=cant_curso+v.cant_inscriptos
+			leer(Alumnos,v)
+		fin mientras
+		Corte_Facultad()
+		Cerrar(ALumnos)
+fin accion
