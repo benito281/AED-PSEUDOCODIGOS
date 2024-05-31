@@ -1,0 +1,122 @@
+Accion NL_4 es
+	Ambiente
+		UTN=registro
+			clave=registro
+				facultad:AN(30)
+				tema:AN(20)
+				curso:AN(10)
+				turno:{"M","T","N"}
+				fecha_inicio:fecha
+				id_curso:entero
+			fin registro
+			duracion:entero
+			cupo:entero
+			cant_inscriptos:entero
+		fin registro
+
+		Salida=registro
+			facultad:AN(30)
+			tema:AN(20)
+			cant_cursos:entero
+		fin registro
+
+		Alumnos:regsitro de UTN ordenado por clave
+		v:UTN
+		Sal:archivo de Salida 
+		s:Salida
+
+		cont_curso:entero
+
+		cont_inscriptos_i:entero
+
+		tema_mayor:AN(20)
+		cant_mayor:entero
+		cant_inscriptos:entero
+		
+		tema_usuario:AN(20)
+		porcentaje:entero
+		cont_curso_usuario:entero
+
+		total_curso:entero
+		total_i:entero
+		total_n:entero
+		
+		reg_facultad:AN(30)
+		reg_tema:AN(20)
+		reg_curso:AN(10)
+
+
+		Procedimiento Corte_Tema()
+			Corte_Curso()
+			Si v.mes + 1 >= fecha_sistema() entonces
+				s.facultad:=reg_facultad
+				s.tema:=reg_tema
+				s.cant_cursos:=cont_curso
+				Grabar(Sal,s)
+			fin si
+			Si cant_inscriptos > cant_cant_mayor entocnes
+				tema_mayor:=reg_tema
+				cant_mayor:=cant_inscriptos
+			fin si
+			total_curso:=total_curso+cont_curso
+			cant_inscriptos:=0
+			cont_curso:=0
+			reg_facultad:=v.facultad
+			reg_tema:=v.tema
+		fin procedimiento
+
+		Procedimiento Cort_Curso()
+			Esc("El total de alumnos que ya iniciaron las clases en el curso:"reg_curso"es de:"cont_inscriptos_i)
+			cont_inscriptos_i:=0
+			reg_curso:=v.curso
+		fin procedimiento
+
+		
+
+	Proceso
+		Abrir /E(Alumnos)
+		Leer(Alumnos,v)
+		reg_facultad:=v.facultad
+		reg_tema:=v.tema
+		reg_curso:=v.curso
+		cont_curso:=0
+		cont_inscriptos_i:=0
+		cant_mayor:=0
+		cant_inscriptos:=0
+		porcentaje:=0
+		cont_curso_usuario:=0
+		total_curso:=0
+		Esc("Ingrese el tema que desea conoser")
+		Leer(tema_usuario)
+		total_i:=0
+		total_n:=0
+		Mientras NFDA(Alumnos) hacer
+			Si v.tema <> reg_tema entonces
+				Corte_Tema()
+			si no
+				Si v.curso <> reg_curso entonces
+					Corte_Curso()
+				fin si
+			fin si
+			Si fecha_sistea() >= v.fecha entonces
+				cont_inscriptos_i:=cont_inscriptos_i + v.cant_inscriptos
+				total_i:=total_i + v.cant_inscriptos
+			si no
+				total_n:=total_n + v.cant_inscriptos
+			fin si
+			cont_curso:=cont_curso+1
+			cont_inscriptos:=cont_inscriptos + v.cant_inscriptos
+			Si v.tema =tema_usuario entonces
+				cont_curso_usuario:=cont_curso_usuario+1
+			fin si
+			leer(Alumnos,v)
+		fin mientras
+		Corte_Tema()
+		Esc("El total de alumnos que ya iniciaron las clases es de:" total_i)
+		Esc("El total de alumnos que todavia no iniciaron las clases es de:"total_n)
+		Esc("El tema con mayor cantidad de personas inscriptas es de:",tema_mayor" con" tema_mayor)
+		porcentaje:=(cont_curso_usuario div total_curso)*100
+		Esc("El porcentaje de cursos del tema:"tema_usuario" es de :"porcentaje)
+		Cerrar(ALumnos)
+		Cerrar(Sal)
+fin accion	
