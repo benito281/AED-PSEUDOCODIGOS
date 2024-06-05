@@ -1,0 +1,115 @@
+Accion Experto es
+	Ambiente
+		Desarrollo=registro
+			clave=registro
+				sucursal: AN(30)
+				area:AN(30)
+				id_proyecto:entero
+			fin registro
+			cant_trabajadores:entero
+			estado{"N","I","P","F"}
+			presupuesto_actual:entero
+			presupuesto_inicial:entero
+		fin registro
+
+		Sal=registro
+			sucursal:AN(30)
+			area:AN(30)
+			id_proyecto:entero
+			tot_trabajadores:entero
+		fin registro
+
+		Proyectos:archivo de Desarrollo ordenado por clave
+		p:Desarrollo
+
+		Salida:archivo de Sal
+		s:Sal
+
+		cont_area:entero			//Punto 1
+		total_sucursal:entero
+		proyectos_area:entero
+		total_proyectos:entero
+
+		proyectos_correintes:entero //Punto 2
+
+		sucursal_menor:AN(30) //Punto 3
+		cant_menor:entero
+		cont_empleados:entero
+
+		porcentaje:entero //punto 4
+
+		reg_area:AN(30)
+		reg_sucursal:AN(30)
+
+		Procedimiento Corte_Area()
+			Esc("La cantidad de proyectos que no han finalizado en el area", reg_area "es de :", proyectos_area)
+			Esc("La cantidad de trabajadores de dichos proyectos es de:", cont_area)
+			total_sucursal:=total_sucursal + cont_area
+			total_proyectes:= total_proyectos + proyectos_area
+			cont_area:=0
+			proyectos_area:=0
+			reg_area:=p.area
+		fin procedimiento
+
+		Procedimiento Corte_Sucursal()
+			Corte_Area()
+			Esc("La cantidad de proyectos que finalizaron en la sucursal", reg_sucursal "es de:", total_proyectos)
+			Esc("La cantidad de trabajadores total en la sucursal es de:" tota_sucursal)
+			total_proyectos:=0
+			total_sucursal:=0
+			Si cont_empleados < cant_menor entonces
+				cant_menor:=cont_empleados
+				sucursal_menor:=reg_sucursal
+			fin si
+			cont_empleados:=0
+			reg_sucursal:=p.sucursal
+		fin procedimiento
+
+	Proceso
+		Abrir /E(Proyectos)
+		Abrir /S(Sal)
+		Leer(Proyectos,p)
+		cont_area:=0			
+		total_sucursal:=0
+		proyectos_area:=0
+		total_proyectos:=0
+
+		proyectos_correintes:=0 
+
+		cant_menor:=HV
+		cont_empleados:=0
+
+		reg_area:=p.area
+		reg_sucursal:p.sucursal
+
+		Mientras NFDA(Proyectos) hacer
+			Si reg_sucursal <> p.sucursal entonces
+				Corte_Sucursal()
+			sino
+				Si reg_area <> p.area entonces
+					Corte_Area()
+				fin si
+			fin si
+			Si p.estado <> "F" entonces
+				cont_area:=cont_area +1
+				proyectos_area:=proyectos_area +1
+			fin si
+			Si p.sucursal ="Corrientes" y p.estado <>"N" y p.entado <>"F" y p.cant_trabajadores <7 entonces
+				proyectos_corrientes:=proyectos_corrientes + 1
+			fin si
+			cont_empleados:=p.cant_traajadores + cont_empleados
+			porcentaje:= (p.prusupuesto_actual*100) div p.presupuesto_inicial
+			Si porcentaje > 75 entonces
+				s.sucursal:=p.sucursal
+				s.area:=p.area
+				s.id_proyectos:=p.id_proyectos
+				s.tot_trabajadores:=p.cant_trabajadores
+				Grabar(Sal,s)
+			fin si
+			Leer(Proyectos,p)
+		fin mientras
+		Corte_Sucursal
+		Cerrar(Sal)
+		Cerrar(Proyectos)
+fin accion 
+
