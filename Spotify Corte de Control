@@ -1,0 +1,88 @@
+Accion playlist es
+	Ambiente
+		reg1=registro
+			clave=registro
+				genero:AN(20)
+				artista:AN(70)
+				albun:AN(12)
+				codigo:N(15)
+			fin registro
+			fecha_publicacion:fecha
+			cant_reproducciones:N(20)
+		fin registro
+
+		reg_sal=registro
+			artista:AN(70)
+			cant_canciones:N(3)
+		fin registro
+
+		sal:archivo de reg_sal
+		s:reg_sal
+		canciones:archivo de reg1 ordenado por clave
+		v:reg1
+
+		cont_c:entero //punto 1
+
+		reproducciones_genero:entero  //punto2
+		total_reproducciones:entero
+
+		artita_mayor:AN(70)			//punto3
+		reproducciones_mayor:entero
+		reproducciones_artita:entero
+
+		reg_artista:AN(70)
+		reg_genero:AN(20)
+
+		Procedimiento Corte_Artista()
+			s.artita:=reg_artista
+			s.cant_canciones:=cont_c
+			Esc(sal,s)
+			Si reproducciones_artita > reproducciones_mayor entonces
+				artista_mayor:=reg_artista
+				reproducciones_mayor:=reproducciones_artista
+			fin si
+			cont_c:=0
+			reproducciones_genero:=reproducciones_genero + reproducciones_artista
+			reproducciones_artista:=0
+			reg_artista:=v.artista
+		fin procedimiento
+
+		Procedimiento Corte_Genero()
+			Corte_Artist()
+			Esc("La cantidad de reproducciones del genero:", reg_genero "es de :" reproducciones_genero)
+			total_reproducciones:=total_reproducciones + reproducciones_genero
+			reproducciones_genero:=0
+			reg_genero:=v.genero
+		fin procedimiento
+
+	Proceso
+		Abrir E/(canciones)
+		Abrir S/(sal)
+		Leer(canciones,v)
+
+		reproducciones_genero::=0
+		total_reproducciones:=0
+
+		reproducciones_mayor:=0
+		reproducciones_artita:=0
+
+		reg_artista:v.artista
+		reg_genero:v.genero
+		Mientras NFDA(canciones) hacer
+			Si reg_genero <> v.genero entonces
+				Corte_Genero()
+			si no
+				Si reg_artista <> v.artista entonces
+					Corte_Artista
+				fin si
+			fin si
+			cont_c:=cont_c + 1
+			reproducciones_artista:=reproducciones_artista + v.cant_reproducciones
+			Leer(canciones,v)
+		fin mientras
+		Corte_Genero()
+		Esc("El total de reproducciones es de:"total_reproducciones)
+		Esc("El artista con mas reproducciones es:", artista_mayor "con " reproducciones_mayor "reproducciones")
+		Cerrar(sal)
+		Cerrar(canciones)
+fin accion
