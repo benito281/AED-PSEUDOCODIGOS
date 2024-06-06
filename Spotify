@@ -1,0 +1,149 @@
+Accion Playlist es
+	Ambiente
+		playlist:secuencia de caracteres
+		p:caracter
+
+		cancion:secuencia de caracteres
+		c:caracter
+
+		sal:secuencia de caracteres //punto 4
+
+		total_playlist:entero   //punto 1
+		total_R:entero
+		total_F:entero
+		total_E:entero
+		total_P:entero
+		
+	
+		cant_canciones //punto 2
+		totla_canciones:=entero
+		
+		genero:{"F","R","E","P"} //punto 3
+		aux:{"F","R","E","P"}
+		R,E,F,P:enteros
+		mayor:entero
+
+		i:entero
+		j:entero
+		FUNCION convertidor(p:caracter):entero
+	        SEGUN v HACER
+	            ="0": convertidor:=0
+	            ="1": convertidor:=1
+	            ="2": convertidor:=2
+	            ="3": convertidor:=3
+	            ="4": convertidor:=4
+				="5": convertidor:=5
+	            ="6": convertidor:=6
+	            ="7": convertidor:=7
+	            ="8": convertidor:=8
+	            ="9": convertidor:=9
+	        FIN_SEGUN
+       	fin funcion
+
+	proceso
+		Arr(playlist)
+		Arr(canciones)
+		Crear(sal)
+		Avz(playlist,p)
+		Avz(canciones,c)
+		total_playlist:=0
+		total_R:=0
+		total_P:=0
+		total_F:=0
+		total_E:=0
+		total_canciones:=0
+		R,F,E,P:=0
+		Mientras NFDS(playlist) hacer
+			mientras p <> "?" hacer
+				aux:=p
+				Segun p hacer
+					="F":total_F:=total_F + 1
+					="P":total_P:=total_P + 1
+					="E":total_E:=total_E + 1
+					="F":total_F:=total_F + 1
+				fin si
+				total_playlist:=total_playlist + 1
+				Avz(playlist,p)
+				avz(playlist,p)
+				Si aux = "R" entonces
+					mientras p <> "+" hacer
+						Esc(sal,p)
+						Avz(playlist,p)
+					fin mientras
+				si no
+					Mientras p <> "+" hacer
+						Avz(playlist,p)
+					fin mientras
+				fin si
+				si aux = "R" entonces
+					Esc(sal,"+")
+				fin si
+				avz(playlist,p)
+				mientras v <> "+" hacer
+					Avz(playlist,p)
+				fin mientras
+				para i :=1 hasta 13 hacer
+					Avz(playlist,p)
+				fin para
+				cant_canciones:=0
+				cant_canciones:= cant_canciones + (convertidor(p)*100)
+				avz(playlist,p)
+				cant_canciones:=cant_canciones + (convertidor(p)*10)
+				avz(playlist,p)
+				cant_canciones:=cant_canciones + convertidor(p)
+				total_canciones:=total_canciones + cant_canciones
+				segun aux hacer
+					="R":R:=R+cant_canciones
+					="P":P:=P+cant_canciones
+					="E":E:=E+cant_canciones
+					="F":F:=F+cant_canciones
+				fin segun
+				Avz(playlist,p)
+				Avz(playlist,p)
+				para i:= 1 hasta cant_canciones hacer
+					mientras c <> "#" hacer
+						si aux = "R" entonces
+							Esc(sal,c)
+						fin si
+						avz(canciones,c)
+					fin mientras
+					para j :=1 hasta 11 hacer
+						Avz(canciones,c)
+					fin para
+					mientras c <> "/" hacer
+						si aux = "R" entonces
+							Esc(sal,c)
+						fin si
+						avz(canciones,c)
+					fin mientras
+					avz(canciones,c)
+				fin para
+			fin mientras
+			avz(playlist,p)
+		fin mientras
+		Cerrar(sal)
+		cerrar(canciones)
+		cerrar(playlist)
+		Esc("El porcentaje de playlist de pop es de:" (total_P*100)div total_playlist)
+		Esc("El porcentaje de playlist de folclore es de:" (total_F*100)div total_playlist)
+		Esc("El porcentaje de playlist de rock es de:" (total_R*100)div total_playlist)
+		Esc("El porcentaje de playlist de electronica es de:" (total_E*100)div total_playlist)
+
+		Esc("El promedio de canciones por playlist es de:" total_canciones div total_playlist)
+
+		mayor:=R
+		genero:="R"
+		Si F > mayor entonces
+			mayor:=F
+			genero:="F"
+		fin si
+		Si P > mayor entonces
+			mayor:=P
+			genero:="P"
+		fin si
+		Si E > mayor entonces	
+			mayor:=E
+			generto:="E"
+		fin si
+		Esc("El genero con mayor cantidad de canciones es :", genero "con " mayor "canciones")
+fin accion
