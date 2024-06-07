@@ -1,0 +1,160 @@
+ACCION secuencia_spotify ES
+    AMBIENTE
+        playlist, canciones, sal : secuencia de caracteres;
+        p, c, aux, mayorGenero : caracter;
+		
+        p_pop,p_rock,p_electro,p_folk, 
+		t_elect, t_folk, t_pop, t_rock : real;
+        totalCanciones, totalPlaylist,
+		i, mayorCantidad : real;
+        letras = 'A'..'Z';
+        
+        FUNCIÓN convertirEntero(valor : caracter): entero ES
+            SEGUN (valor) HACER
+                '1' : convertirEntero := 1;
+                '2' : convertirEntero := 2;
+                '3' : convertirEntero := 3;
+                '4' : convertirEntero := 4;
+                '5' : convertirEntero := 5;
+                '6' : convertirEntero := 6;
+                '7' : convertirEntero := 7;
+                '8' : convertirEntero := 8;
+                '9' : convertirEntero := 9;
+                '0' : convertirEntero := 0;
+            FIN_SEGUN
+        FIN_FUNCIÓN
+
+        PROCEDIMIENTO NombrePlaylist() ES
+            SI (aux = 'R') ENTONCES
+                MIENTRAS (p <> '+') HACER 
+                    ESCRIBIR(sal, p); //Guarda el nombre de la playlist en la salida
+                    AVANZAR(playlist,p);
+                FIN_MIENTRAS
+                ESCRIBIR(sal, '+');
+            SI NO
+                MIENTRAS (p <> '+') HACER
+                    AVANZAR(playlist, p);
+                FIN_MIENTRAS
+        FIN_PROCEDIMIENTO
+
+        FUNCIÓN ConvertirCanciones(): entero ES
+            AMBIENTE
+                resultado : entero;
+            PROCESO
+                resultado := 0;
+                resultado := convertirEntero(p) * 100;
+                AVANZAR(playlist,p);
+                resultado := resultado + (convertirEntero(p) * 10);
+                AVANZAR(playlist,p);
+                resultado := resultado + convertirEntero(p);
+                ConvertirCanciones := resultado;
+        FIN_FUNCIÓN
+
+       PROCEDIMIENTO AvanzarElementos() ES
+            MIENTRAS (p <> '+') HACER
+                AVANZAR(playlist,p); //Usuario
+            FIN_MIENTRAS
+            AVANZAR(playlist,p);
+            PARA i := 1 HASTA 11 HACER
+                AVANZAR(playlist,p);
+            FIN_PARA
+            AVANZAR(playlist,p);
+       FIN_PROCEDIMIENTO
+        
+		PROCEDIMIENTO mayorCantidadCanciones () ES
+			SI (cantidadC > mayorCantidad) ENTONCES
+				mayorCantidad := cantidadC;
+				mayorGenero := aux;
+			FIN_SI
+		FIN_PROCEDIMIENTO
+		
+		FUNCIÓN mostrarGenero(genero : caracter) : alfanumerico ES
+			SEGUN aux HACER
+				'R' :  mostrarGenero := 'rock';
+				'P' :  mostrarGenero   := 'pop';
+				'E' :  mostrarGenero := 'electrónica';
+				OTRO
+					mostrarGenero := 'folklore';
+			FIN_SEGUN
+		FIN_ACCION
+		
+		PROCEDIMIENTO mostrarPorcentaje() ES
+			p_electro := (t_elect / totalPlaylist) * 100;
+			p_folk := (t_folk / totalPlaylist) * 100;
+			p_pop := (t_pop / totalPlaylist) * 100;
+			p_rock := (t_rock / totalPlaylist) * 100;
+			
+			ESCRIBIR('El porcentaje de Electrónica es ', p_electro);
+			ESCRIBIR('El porcentaje de Folklore es ',p_folk);
+			ESCRIBIR('El porcentaje de Pop es ',p_pop);
+			ESCRIBIR('El porcentaje de Rock es ',p_rock);
+		FIN_PROCEDIMIENTO
+PROCESO
+    ARRANCAR(playlist); //R+Una Play+Valentina1+001203+1352+012?
+    ARRANCAR(canciones); //One#0744#1989#Metallica/Dress#0350#2017#Taylor Swift/
+
+    CREAR(sal);
+    AVANZAR(playlist,p);
+    AVANZAR(canciones,c);
+	totalCanciones := 0;
+	totalPlaylist := 0;
+	t_rock := 0; t_elect := 0; t_folk := 0; t_pop := 0;
+	p_electro := 0; p_folk := 0; p_pop := 0; p_rock := 0;
+	mayorCantidad := 0;
+    MIENTRAS (NFDS(playlist)) HACER
+        MIENTRAS (p <> '?') HACER
+            aux := p;
+			totalPlaylist := totalPlaylist + 1;
+			
+			SEGUN aux HACER
+				'R' :  t_rock  := t_rock + 1;
+				'P' :  t_pop   := t_pop + 1;
+				'E' :  t_elect := t_elect + 1;
+				OTRO
+					t_folk := t_folk + 1;
+			FIN_SEGUN
+			
+            AVANZAR(playlist,p);
+            AVANZAR(playlist,p);
+            NombrePlaylist(); //Avanza la secuencia o guarda el nombre en la salida
+            AVANZAR(playlist,p);
+            AvanzarElementos(); Avanza Usuario, Fecha y duración
+        FIN_MIENTRAS
+		
+        AVANZAR(playlist,p); //Avanza la siguiente playlist
+        cantidadC := ConvertirCanciones();
+        AVANZAR(playlist,p); //Queda en el ultimo digito '?' 
+		totalCanciones := totalCanciones + cantidadC;
+		
+        PARA i := 1 HASTA cantidadC HACER
+            SI (aux = 'R') ENTONCES
+                MIENTRAS (c <> '#') HACER
+                    ESCRIBIR(sal, c);
+                    AVANZAR(canciones,c);
+                FIN_MIENTRAS  
+                MIENTRAS (c NO EN letras) HACER
+                    AVANZAR(canciones,c);
+                FIN_MIENTRAS
+                MIENTRAS (c <> '/') HACER
+                    ESCRIBIR(sal, c);
+                    AVANZAR(canciones,c)
+                FIN_MIENTRAS
+            SI NO
+                MIENTRAS (c <> '/') HACER
+                    AVANZAR(canciones,c);
+                FIN_MIENTRAS
+            FIN_SI
+            AVANZAR(canciones, c);
+        FIN_PARA
+		AVANZAR(playlist, p);
+    FIN_MIENTRAS
+	mostrarPorcentaje();
+	ESCRIBIR('La cantidad promedio de canciones es ', (totalCanciones / totalPlaylist))
+	ESCRIBIR('La playlist con mayorCantidad de canciones es ', mostrarGenero(mayorGenero));
+	
+    CERRAR(sal);
+    CERRAR(playlist);
+    CERRAR(canciones);
+
+FIN_ACCION.
+
