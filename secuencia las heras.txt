@@ -1,0 +1,138 @@
+Consignas : https://frreutn-my.sharepoint.com/:i:/g/personal/benitoortiz280_ca_frre_utn_edu_ar/ETtD_89d_yJEgVZPuOVtfkwB24U5AkrKJddbMlKW7i9nzQ?e=U7crbh
+
+ACCION las_heras ES
+	AMBIENTE
+	sec, corregida, usuario : secuencia de caracteres;
+	v : caracter; //Variable que trata la secuencia
+	auxP,auxU,auxD,auxM,auxC, p : caracter; //Variables auxiliares unidad, decena, centena,mil,pais, pais ingresado por el usuario
+	arg, peru, chile, error, anio, total : entero;
+	numeros = ('1','2','3','4','5','6','7','8','9','0',);
+	
+	FUNCION ConvertirEntero(n : caracter) : entero ES
+		SEGUN (n) HACER
+			'1' : ConvertirEntero :=  1;
+			'2' : ConvertirEntero :=  2;
+			'3' : ConvertirEntero :=  3;
+			'4' : ConvertirEntero :=  4;
+			'5' : ConvertirEntero :=  5;
+			'6' : ConvertirEntero :=  6;
+			'7' : ConvertirEntero :=  7;
+			'8' : ConvertirEntero :=  8;
+			'9' : ConvertirEntero :=  9;
+			'0' : ConvertirEntero :=  0;
+		FIN_SEGUN
+	FIN_FUNCION
+	
+	PROCEDIMIENTO guardarSecuencia() ES
+		MIENTRAS (v NO EN numeros) HACER
+			SI (p = auxP) ENTONCES
+				ESCRIBIR(usuario, v);
+			FIN_SI
+			ESCRIBIR(corregida, v);
+			AVANZAR(sec, v);
+		FIN_MIENTRAS
+	FIN_PROCEDIMIENTO
+	
+	PROCEDIMIENTO corregirError() ES
+		AMBIENTE
+			anioIngresado, anioOriginal : entero;
+			temp : caracter;
+		PROCESO
+			anioIngresado := 0; anioOriginal := 0;
+			
+			anioIngresado := (ConvertirEntero(auxM) * 1000) + (ConvertirEntero(auxC) * 100) + (ConvertirEntero(auxD) * 10) + ConvertirEntero(auxU); //Es el año que viene en la secuencia
+			anioOriginal := (ConvertirEntero(auxU) * 1000) + (ConvertirEntero(auxD) * 100) + (ConvertirEntero(auxC) * 10) + ConvertirEntero(auxM); //Es el posible año correcto
+			SI (anioOriginal >= anioIngresado) ENTONCES
+				bandera := VERDADERO;
+			SINO
+				temp := auxM;
+				auxM := auxU; 
+				auxU := temp;
+			
+				temp := auxC;
+				auxC := auxD;
+				auxD := temp;
+				bandera := FALSO;
+			FIN_SI
+	FIN_PROCEDIMIENTO
+	
+	PROCEDIMIENTO mostrarPorcentajeError() ES
+		SI (total > 0) ENTONCES
+			ESCRIBIR('El porcentaje con información erronea es ', (error / total) * 100);
+		FIN_SI
+	FIN_PROCEDIMIENTO
+	
+PROCESO
+	ARRANCAR(sec);
+	CREAR(corregida);
+	CREAR(usuario);
+	
+	ESCRIBIR('Ingrese un pais A - Argentina, C - Chile, P - Peru');
+	LEER(p);
+	
+	arg := 0;
+	chile := 0;
+	peru := 0;
+	bandera := VERDADERO;
+	error := 0;
+	anio := 0;
+	AVANZAR(sec, v);
+	MIENTRAS NFDS(sec) HACER
+		MIENTRAS (v <> '|') HACER
+			auxP := v; //Pais
+			guardarSecuencia(); //Avanza hasta que encuentre un numero
+			auxM := v;
+			AVANZAR(sec, v);
+			auxC := v; 
+			AVANZAR(sec, v);
+			auxD := v;
+			AVANZAR(sec, v);			
+			auxU := v;
+			corregirError(); //Verifica y corrige el año de ingreso
+			
+			ESCRIBIR(corregida, auxM); //Termina de guardar el año en la secuencia corregida
+			ESCRIBIR(corregida, auxC);
+			ESCRIBIR(corregida, auxD);
+			ESCRIBIR(corregida, auxU);
+			ESCRIBIR(corregida, '|');
+			SI (auxP = p) ENTONCES
+				ESCRIBIR(usuario, auxM);
+				ESCRIBIR(usuario, auxC);
+				ESCRIBIR(usuario, auxD);
+				ESCRIBIR(usuario, auxU);
+				ESCRIBIR(usuario, '|')
+			FIN_SI
+				
+			SI bandera = FALSO ENTONCES
+				error := error + 1; //Cuenta los errores de año ingresados
+			FIN_SI
+			
+			anio := (ConvertirEntero(auxM) * 1000) + (ConvertirEntero(auxC) * 100) + (ConvertirEntero(auxD) * 10) + ConvertirEntero(auxU);
+			
+			SI (anio < 2000) ENTONCES
+				SEGUN auxP HACER
+					'A' : arg := arg + 1;
+					'C' : chile := chile + 1;
+				OTRO
+					peru := peru + 1;
+				FIN_SEGUN
+			FIN_SI
+			
+				
+				total := total + 1;
+			AVANZAR(sec, v); //Queda en el |	
+		FIN_MIENTRAS
+		AVANZAR(sec, v);
+	FIN_MIENTRAS
+	
+	ESCRIBIR('Los escultores que comenzaron antes del 2000 son ');
+	ESCRIBIR('Argentina ', arg);
+	ESCRIBIR('Chile ', chile);
+	ESCRIBIR('Peru ', peru);
+	mostrarPorcentajeError();
+	CERRAR(usuario);
+	CERRAR(corregida);
+	CERRAR(sec);
+FIN_ACCION.
+
+
