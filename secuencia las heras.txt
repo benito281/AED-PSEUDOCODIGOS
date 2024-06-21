@@ -1,5 +1,5 @@
 Consignas : https://frreutn-my.sharepoint.com/:i:/g/personal/benitoortiz280_ca_frre_utn_edu_ar/ETtD_89d_yJEgVZPuOVtfkwB24U5AkrKJddbMlKW7i9nzQ?e=U7crbh
-
+Ejecutable : https://replit.com/@BenitoOrtiz2/Simulacro-de-parcial?v=1
 ACCION las_heras ES
 	AMBIENTE
 	sec, corregida, usuario : secuencia de caracteres;
