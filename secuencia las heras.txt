@@ -57,7 +57,7 @@ ACCION las_heras ES
 	FIN_PROCEDIMIENTO
 	
 	PROCEDIMIENTO mostrarPorcentajeError() ES
-		SI (total > 0) ENTONCES
+		SI (error > 0) ENTONCES
 			ESCRIBIR('El porcentaje con información erronea es ', (error / total) * 100);
 		FIN_SI
 	FIN_PROCEDIMIENTO
