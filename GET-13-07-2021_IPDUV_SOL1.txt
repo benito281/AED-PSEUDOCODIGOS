@@ -1,4 +1,5 @@
 consigna : https://frreutn-my.sharepoint.com/personal/benitoortiz280_ca_frre_utn_edu_ar/Documents/UTN/AED/Modelos%20de%20parcial/GET%2013-07-2021.pdf?wdsle=0&CT=1719172687228&OR=ItemsView
+Ejecutable pascal : https://replit.com/@BenitoOrtiz2/ipduv?v=1
 ACCION IPDUV ES
 AMBIENTE
     sec, impar, par: secuencia de caracteres;
