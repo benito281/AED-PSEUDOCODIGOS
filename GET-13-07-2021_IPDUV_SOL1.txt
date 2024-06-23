@@ -1,0 +1,69 @@
+consigna : https://frreutn-my.sharepoint.com/personal/benitoortiz280_ca_frre_utn_edu_ar/Documents/UTN/AED/Modelos%20de%20parcial/GET%2013-07-2021.pdf?wdsle=0&CT=1719172687228&OR=ItemsView
+ACCION IPDUV ES
+AMBIENTE
+    sec, impar, par: secuencia de caracteres;
+    v, auxdni: caracter;
+    i: entero;
+    total, res, barr, pv, font: real;
+    n_impares = ('1', '3', '5', '7', '9');
+
+PROCESO
+    ARRANCAR(sec); AVANZAR(sec, v);
+    total := 0; res := 0; barr := 0; pv := 0; font := 0;
+    CREAR(impar); CREAR(par);
+    
+    MIENTRAS NFDS(sec) HACER
+        MIENTRAS (v <> '-') HACER
+            AVANZAR(sec, v); //Avanza el nombre y apellido
+        FIN_MIENTRAS
+        AVANZAR(sec, v); // Avanza el -
+        PARA i := 1 HASTA 7 HACER
+            AVANZAR(sec, v); //Avanza hasta el ultimo digito del dni
+        FIN_PARA
+        auxdni := v; //Guarda el ultimo digito del dni
+        AVANZAR(sec, v); 
+        AVANZAR(sec, v); //Avanza dni y -
+        SEGUN v HACER
+            '1': res := res + 1;
+            '2': barr := barr + 1;
+            '3': pv := pv + 1;
+            '4': font := font + 1;
+        FIN_SEGUN
+        AVANZAR(sec, v); 
+        AVANZAR(sec, v);
+        MIENTRAS (v <> '-') HACER
+            SI (auxdni en n_impares) ENTONCES
+                ESCRIBIR(impar, v);
+            SI_NO
+                ESCRIBIR(par, v);
+            FIN_SI
+            AVANZAR(sec, v);
+        FIN_MIENTRAS
+        SI (auxdni en n_impares) ENTONCES
+            ESCRIBIR(impar, '#');
+        SI_NO
+            ESCRIBIR(par, '#');
+        FIN_SI
+        total := total + 1;
+        
+        MIENTRAS (v <> '&') HACER
+            AVANZAR(sec, v);
+        FIN_MIENTRAS
+        AVANZAR(sec, v);
+    FIN_MIENTRAS
+    
+    ESCRIBIR('Inscriptos en Barranqueras', barr);
+    ESCRIBIR('Inscriptos en Resistencia', res);
+    ESCRIBIR('Inscriptos en Puerto Vilelas', pv);
+    ESCRIBIR('Inscriptos en Fontana', font);
+    ESCRIBIR('Porcentajes de Inscritos');
+
+    ESCRIBIR('Fontana', (font / total) * 100);
+    ESCRIBIR('Resistencia', (res / total) * 100);
+    ESCRIBIR('Puerto Vilelas', (pv / total) * 100);
+    ESCRIBIR('Barranqueras', (barr / total) * 100);
+    
+    CERRAR(par);
+    CERRAR(impar);
+    CERRAR(sec);
+FIN_ACCION.
