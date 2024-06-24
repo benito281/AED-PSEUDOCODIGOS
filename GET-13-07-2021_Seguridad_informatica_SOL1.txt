@@ -1,0 +1,53 @@
+sec : 1h4l1#q52#t1ll#+E
+
+ACCION seg_info ES 
+	sec, salida : secuencia de caracteres;
+	v : caracter;
+	contPal, contMax, cont : entero;
+	numeros = ('1','2','3','4','5');
+	
+PROCESO
+	ARRANCAR(sec);
+	CREAR(salida);
+	
+	cont := 0;
+	contPal := 0;
+	contMax := 0;
+	AVANZAR(sec, v);
+	
+	MIENTRAS NFDS(sec) HACER
+		cont := 0;
+		MIENTRAS (v <> '+') HACER
+			MIENTRAS (v <> '#') HACER 
+				SI (v en numeros) ENTONCES
+					SEGUN v HACER
+						'1' : ESCRIBIR(salida, 'a');
+						'2' : ESCRIBIR(salida, 'e');
+						'3' : ESCRIBIR(salida, 'i');
+						'4' : ESCRIBIR(salida, 'o');
+						'5' : ESCRIBIR(salida, 'u');
+					FIN_SEGUN
+				SINO
+					ESCRIBIR(salida, CONSO(v));
+				FIN_SI
+				AVANZAR(sec, v);
+			FIN_MIENTRAS
+			
+			SI (v = '#') ENTONCES 
+				cont := cont + 1; //Cuenta las pablabras que hay en un mensaje
+				ESCRIBIR(salida, ' ');
+			FIN_SI
+			AVANZAR(sec, v);
+		FIN_MIENTRAS
+		
+		contPal := cont;
+		SI (contMax < contPal) ENTONCES
+			contMax := contPal;
+		FIN_SI
+		AVANZAR(sec, v); //Avanza el +
+		AVANZAR(sec, v); //Avanza la N o E
+	FIN_MIENTRAS
+	ESCRIBIR('La cantidad de palabras que contiene el mensaje mas largo es de ', contMax);
+	CERRAR(salida);
+	CERRAR(sec);
+FIN_ACCION. 
