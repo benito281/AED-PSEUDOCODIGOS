@@ -1,0 +1,119 @@
+consigna = https://frreutn-my.sharepoint.com/:i:/g/personal/benitoortiz280_ca_frre_utn_edu_ar/EboTdUw1yAdBpOMTW4cF9goBzcmGx71riUVup1NJ73d04g?e=NxO75H
+
+
+ACCION modelo_parcial_2007 ES
+	AMBIENTE
+		clientes, saldos, salida : secuencia de caracteres;
+		c,s,auxNombre : caracter;
+		c1,c2,c3,c4,c5,c6,c7,c8,c9,c10,c11, guion1, guion2 : caracteres; //Auxiliares del cuil
+		vocales = ('A','E','I','O','U');
+		i, cantErrorSaldo, cantErrorClientes : entero;
+		
+		PROCEDIMIENTO ResguardoCuil () ES
+			PARA i := 1 HASTA 12 HACER
+				SEGUN i HACER
+					1 : c1 := c;
+					2 : c2 := c;
+					3 : guion1 := c;
+					4 : c3 := c;
+					5 : c4 := c;
+					6 : c5 := c;
+					7 : c6 := c;
+					8 : c7 := c;
+					9 : c8 := c;
+					10 : c9 := c;
+					11 : c10 := c;
+					12 : guion2 := c;
+				FIN_SEGUN
+				AVANZAR(clientes,c);
+			FIN_PARA
+			c11 := c;
+			AVANZAR(clientes,c);
+		FIN_PROCEDIMIENTO
+		
+		PROCEDIMIENTO GuardarCuil() ES
+			ESCRIBIR(salida, c1);
+			ESCRIBIR(salida, c2);
+			ESCRIBIR(salida, guion1);
+			ESCRIBIR(salida, c3);
+			ESCRIBIR(salida, c4);
+			ESCRIBIR(salida, c5);
+			ESCRIBIR(salida, c6);
+			ESCRIBIR(salida, c7);
+			ESCRIBIR(salida, c8);
+			ESCRIBIR(salida, c9);
+			ESCRIBIR(salida, c10);
+			ESCRIBIR(salida, guion2);
+			ESCRIBIR(salida, c11);
+		FIN_PROCEDIMIENTO
+		
+	PROCESO
+		ARRANCAR(clientes);
+		ARRANCAR(saldos);
+		CREAR(salida);
+		cantErrorClientes := 0; cantErrorSaldo := 0;
+		AVANZAR(clientes,c);
+		AVANZAR(saldos,s);
+		MIENTRAS NFDS(clientes) o NFDS(saldos) HACER
+			MIENTRAS (c <> '#') HACER
+				ResguardoCuil(); //Llega hasta el primer caracter del nombre
+				auxNombre := c;
+				
+				MIENTRAS (c <> ' ') HACER
+					AVANZAR(clientes,c); //Avanza el nombre del cliente
+				FIN_MIENTRAS
+				
+				resSigno := s; //Resguarda el signo 
+				
+				SI (auxNombre en vocales) y (resSigno = '-') ENTONCES
+					GuardarCuil();
+				FIN_SI
+				
+				AVANZAR(clientes, c); //Avanza espacio en blanco
+				
+				MIENTRAS (c <> '#') HACER
+					ESCRIBIR(salida, c);
+					AVANZAR(clientes, c); //Guarda el apellido
+				FIN_MIENTRAS
+				
+			FIN_MIENTRAS
+			
+			SI (resSigno = '-') ENTONCES
+				ESCRIBIR(salida, resSigno);
+			FIN_SI
+			
+			AVANZAR(saldos,s); //Queda en el primer digito de un numero
+			
+			MIENTRAS (s <> '+') o (s <> '-') HACER
+				SI (resSigno = '-') ENTONCES
+					ESCRIBIR(salida, s); //Guarda el saldo siempre que el saldo sea -
+				FIN_SI
+				
+				AVANZAR(saldos, s);
+			FIN_MIENTRAS	
+			
+			AVANZAR(clientes, c);
+		FIN_MIENTRAS
+		
+		//En caso de no haber terminado uno u otro
+		SI FDS(clientes) y NFDS(saldos) ENTONCES
+			
+			MIENTRAS NFDS(saldos) HACER
+				cantErrorSaldo := cantErrorSaldo + 1;
+				AVANZAR(saldos, s);
+			FIN_MIENTRAS
+			ESCRIBIR('El archivo de clientes estaba incompleto y el de saldos falto terminar la cantidad que falto es de ', cantErrorSaldo);
+		SINO
+			SI FDS(saldos) y NFDS(clientes) ENTONCES
+				MIENTRAS NFDS(clientes) HACER
+					cantErrorClientes := cantErrorClientes + 1;
+					AVANZAR(clientes, c);
+				FIN_MIENTRAS
+				ESCRIBIR('El archivo de saldos estaba incompleto y el de clientes falto terminar la cantidad que falto es de ', cantErrorClientes);
+			FIN_SI
+		FIN_SI
+		CERRAR(salida);
+		CERRAR(clientes);
+		CERRAR(saldos);
+FIN_ACCION. 
+
