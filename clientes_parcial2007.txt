@@ -54,7 +54,7 @@ ACCION modelo_parcial_2007 ES
 		cantErrorClientes := 0; cantErrorSaldo := 0;
 		AVANZAR(clientes,c);
 		AVANZAR(saldos,s);
-		MIENTRAS NFDS(clientes) o NFDS(saldos) HACER
+		MIENTRAS NFDS(clientes) y NFDS(saldos) HACER
 			MIENTRAS (c <> '#') HACER
 				ResguardoCuil(); //Llega hasta el primer caracter del nombre
 				auxNombre := c;
