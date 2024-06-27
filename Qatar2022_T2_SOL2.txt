@@ -1,0 +1,51 @@
+Ejecutable : https://replit.com/@BenitoOrtiz2/Qatar2022T2?v=1
+ACCION Qatar2022T2 ES
+	AMBIENTE
+		sec : secuencia de caracteres;
+		v : caracter;
+		salida : secuencia de enteros;
+		emp, part, prot, cant : entero;
+		reservaUsuario : ('A'..'Z');		
+PROCESO
+		ARRANCAR(sec);
+		CREAR(salida);
+		ESCRIBIR('Ingrese una zona del estadio para contar debe ser de la A a la Z');
+		LEER(reservaUsuario);
+		cant := 0; part := 0; prot := 0; emp := 0;
+		AVANZAR(sec, v);
+		MIENTRAS NFDS(sec) HACER
+			MIENTRAS (v <> '#') HACER
+				AVANZAR(sec, v); 
+			FIN_MIENTRAS
+			AVANZAR(sec, v); //Queda en el tipo de reserva
+			cant := 0; part := 0; prot := 0; emp := 0;
+			MIENTRAS (v <> '@') HACER
+				SEGUN v HACER
+					'E' : emp := emp + 1;
+					'P' : part := part + 1;
+				OTRO
+					prot := prot + 1;
+				FIN_SEGUN
+				MIENTRAS (v <> '%') HACER
+					AVANZAR(sec, v); //Avanza la razón social
+				FIN_MIENTRAS
+				AVANZAR(sec, v);
+				SI (reservaUsuario = v) ENTONCES
+					cant := cant + 1;
+				FIN_SI
+				MIENTRAS (v <> '_') HACER
+					AVANZAR(sec, v);
+				FIN_MIENTRAS
+				AVANZAR(sec,v);
+			FIN_MIENTRAS
+			ESCRIBIR('Rerservas de Empresa ', emp);
+			ESCRIBIR('Rerservas de Particular ', part);
+			ESCRIBIR('Rerservas de Protocolo ', prot);
+			ESCRIBIR('Rerservas dadas por el usuario ', cant);
+			ESCRIBIR(salida, (emp + part + prot + cant)); //Guarda las reservas en la secuencia de enteros
+			AVANZAR(sec, v);
+		FIN_MIENTRAS
+		
+		CERRAR(salida);
+		CERRAR(sec);
+FIN_ACCION. 
