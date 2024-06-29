@@ -1,3 +1,6 @@
+Ejecutable : https://replit.com/@BenitoOrtiz2/Qatar2022T2?v=1
+Para probar el Algoritmo basta con reemplazar el codigo secuenciaT2 en main.p y luego ejecutar main.p
+
 ACCION Qatar2022T2 ES
 	AMBIENTE
 		sec : secuencia de caracteres;
