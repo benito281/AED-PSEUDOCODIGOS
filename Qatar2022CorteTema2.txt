@@ -1,0 +1,73 @@
+ACCION corteControlQatar2022T2 ES
+  AMBIENTE
+    hotel = REGISTRO
+      clave = REGISTRO
+        cod_cadena : AN(15)
+        niv_hotel : (1..5)
+      FIN_REGISTRO
+      cod_hotel : N(4)
+      nomb_hotel : AN(50)
+      es_ciudad_sede : logico
+      cant_hab : N(4)
+    FIN_REGISTRO
+
+    arch, salida : archivo de hotel ordenado por clave
+    r : hotel
+    total, tot_cad, tot_niv, tot_300 : entero
+    resCadena : AN(15)
+    resNiv_hotel : (1..5)
+
+    PROCEDIMIENTO Corte_Cadena() ES
+      Corte_Nivel()
+      ESCRIBIR('Existen para ', resCadena, ' ', tot_cad)
+      total := total + tot_cad
+      tot_cad := 0
+      resCadena := r.clave.cod_cadena
+    FIN_PROCEDIMIENTO
+
+    PROCEDIMIENTO Corte_Nivel() ES
+      ESCRIBIR('Existen para nivel ', resNiv_hotel, ' ', tot_niv)
+      tot_cad := tot_cad + tot_niv
+      tot_niv := 0
+      resNiv_hotel := r.clave.niv_hotel
+    FIN_PROCEDIMIENTO
+
+  PROCESO
+    ABRIR E/(arch)
+    ABRIR /S(salida)
+
+    total := 0
+    tot_cad := 0
+    tot_niv := 0
+    tot_300 := 0
+
+    LEER(arch, r)
+    resCadena := r.clave.cod_cadena
+    resNiv_hotel := r.clave.niv_hotel
+
+    MIENTRAS NFDA(arch) HACER
+      SI (resCadena <> r.clave.cod_cadena) ENTONCES
+        Corte_Cadena()
+      SINO
+        SI (resNiv_hotel <> r.clave.niv_hotel) ENTONCES
+          Corte_Nivel()
+        FIN_SI
+      FIN_SI
+
+      SI (r.cant_hab > 300) ENTONCES
+        tot_niv := tot_niv + 1
+      FIN_SI
+
+      SI (r.es_ciudad_sede) ENTONCES
+        GRABAR(salida, r)
+      FIN_SI
+
+      LEER(arch, r)
+    FIN_MIENTRAS
+
+    Corte_Cadena()
+    ESCRIBIR('El total general es ', total)
+    
+    CERRAR(salida)
+    CERRAR(arch)
+FIN_ACCION
