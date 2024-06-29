@@ -1,0 +1,35 @@
+consigna : https://frreutn-my.sharepoint.com/personal/benitoortiz280_ca_frre_utn_edu_ar/Documents/UTN/AED/Modelos%20de%20parcial/Ejercicio%20N%C2%B0%202%20(TOTAL%2045%20pts)%20En%20Resistencia%20se%20ha%20implement.pdf?wdsle=0&CT=1719686972623&OR=ItemsView
+//Importante la consigna 1b no se puede resolver
+ACCION emi ES
+	AMBIENTE
+	sec,sal1 : secuencia de caracteres;
+	aux,aux2, v : caracter;
+	cantZ1, porcentaje, total : real;
+PROCESO
+	ARRANCAR(sec);
+	CREAR(sal1);
+	
+	cantZ1 := 0; porcentaje := 0; total :=0;
+	AVANZAR(sec,v);
+	MIENTRAS (NFDS(sec)) HACER
+		aux := v; AVANZAR(sec,v);
+		aux2 := v; AVANZAR(sec, v);
+		SI (aux = 'Z') y (aux2 = '1') ENTONCES
+			ESCRIBIR(sal1, aux); //Guarda si es Z1
+			ESCRIBIR(sal1, au2);
+			cantZ1 := cantZ1 + 1;
+		FIN_SI
+		MIENTRAS (v <> '+') HACER
+			SI (aux = 'Z') y (aux2 = '1') ENTONCES
+				ESCRIBIR(sal1, v); //Guarda los vehiculos estacionados en Z1
+			FIN_SI
+			AVANZAR(sec,v); //Queda en el +
+		FIN_MIENTRAS
+		total := total + 1;
+		AVANZAR(sec,v);
+	FIN_MIENTRAS
+	porcentaje := (cantZ1 / total) * 100;
+	ESCRIBIR('La cantidad encontrada en la zona 1 es ', cantZ1, ' su porcentaje es ', porcentaje, '%');
+	CERRAR(sal1);
+	CERRAR(sec);
+FIN_ACCION. 
