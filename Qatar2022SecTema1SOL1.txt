@@ -1,0 +1,58 @@
+ACCION QatarSecTema1 ES
+	AMBIENTE
+		sec, sal : secuencia de caracteres;
+		v, aux  : caracter;
+		emp, part, prot, reserva, total : entero;
+		tip_reserva : ('E','P','Y');
+		
+PROCESO
+	ARRANCAR(sec);
+	CREAR(sal);
+	ESCRIBIR('Ingrese tipo de reserva E - Empresa, P - Particular, Y - Protocolo');
+	LEER(tip_reserva);
+	emp := 0; part := 0; prot := 0; reserva := 0;
+	AVANZAR(sec, v);
+	MIENTRAS NFDS(sec) HACER
+		MIENTRAS (v <> '#') HACER
+			SI (v en 'a..z') o (v en 'A..Z') ENTONCES
+				ESCRIBIR(sal, v);
+			FIN_SI
+			SI (v = '%') ENTONCES
+				ESCRIBIR(sal, v);
+			FIN_SI
+			AVANZAR(sec, v); //Llega hasta # y guarda el nombre del estadio
+		FIN_MIENTRAS
+		AVANZAR(sec, v);
+		emp := 0; part := 0; prot := 0; reserva := 0; total := 0;
+		MIENTRAS (v <> '@') HACER
+			SEGUN v HACER
+					'E' : emp := emp + 1;
+					'P' : part := part + 1;
+				OTRO
+					prot := prot + 1;
+			FIN_SEGUN
+			aux := v;
+			MIENTRAS (v <> '%') HACER
+				AVANZAR(sec, v) //Avanza tipo de reserva y razon social
+			FIN_MIENTRAS
+			AVANZAR(sec,v);
+			MIENTRAS (v <> '_') HACER
+				SI (tip_reserva = aux) ENTONCES
+					ESCRIBIR(sal, v);
+					reserva := reserva + 1;
+				FIN_SI
+				AVANZAR(sec, v);
+			FIN_MIENTRAS
+			AVANZAR(sec,v);
+		FIN_MIENTRAS
+		ESCRIBIR(sal, v); //Guarda en @ en la salida
+		total := (emp + prot + part + reserva);
+		ESCRIBIR('Total ', total);
+		ESCRIBIR('Protocolo ', prot, ' su porcentaje es ' (prot DIV total) * 100);
+		ESCRIBIR('Particular ', part, ' su porcentaje es ' (part DIV total) * 100);
+		ESCRIBIR('Empresa ', emp, ' su porcentaje es ' (emp DIV total) * 100);
+		AVANZAR(sec, v);
+	FIN_MIENTRAS
+	CERRAR(sal);
+	CERRAR(sec);
+FIN_ACCION. 
