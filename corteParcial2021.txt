@@ -1,0 +1,92 @@
+consigna : https://frreutn-my.sharepoint.com/personal/benitoortiz280_ca_frre_utn_edu_ar/Documents/UTN/AED/2021/Parciales/Primer%20parcial%20(Pr%C3%A1ctica)%20-%20Comisi%C3%B3n%20C_%20Attempt%20review.pdf?wdsle=0&CT=1719801683863&OR=ItemsView
+
+ACCION corte ES
+	AMBIENTE
+		fecha = REGISTRO
+			aaaa : N(4)
+			mm : 1..12
+			dd : 1..31
+		FIN_REGISTRO
+		
+		sis = REGISTRO
+			clave =  REGISTRO
+				sucursal, area : N(4)
+				identificador : N(8)
+			FIN_REGISTRO
+			nombre_completo : AN(150)
+			f_ultimo_log : fecha
+		FIN_REGISTRO
+		
+		total = REGISTRO
+			sucursal,area : N(4)
+			cantidad : N(3)
+		FIN_REGISTRO
+		
+		arch : archivo de sis ordenado por clave;
+		r : sis;
+		
+		sal : archivo de total;
+		s : total;
+		
+		PROCEDIMIENTO Corte_Area() ES
+			ESCRIBIR('El area es ', resArea, ' la cantidad es ', totArea);
+			ESCRIBIR('La cantidad de dias inactivo es ', diasArea);
+			ESCRIBIR('El promedio es ', (diasArea DIV totArea));
+			s.sucursal := resSucursal;
+			s.area := resArea;
+			s.cantidad := totArea;
+			totSucursal := totSucursal + totArea;
+			diasSucursal := diasSucursal + diasArea;
+			GRABAR(sal, s);
+			totArea := 0;
+			diasArea := 0;
+			resArea := r.clave.area;
+		FIN_PROCEDIMIENTO
+		
+		PROCEDIMIENTO Corte_Sucursal() ES
+			Corte_Area();
+			ESCRIBIR('La sucursal es ', resSucursal, ' la cantidad es ', totSucursal);
+			ESCRIBIR('La cantidad de dias inactivo es ', diasSucursal);
+			ESCRIBIR('El promedio de es ', (diasSucursal DIV totSucursal))
+			totalGeneral := totalGeneral + totSucursal;
+			diasGeneral := diasGeneral + diasSucursal;
+			diasSucursal := 0;
+			totSucursal := 0;
+			resSucursal := r.clave.sucursal;
+		FIN_PROCEDIMIENTO
+		
+		resSucursal,resArea : N(4);
+		totalGeneral, totArea, totSucursal, diasInactivo : entero;
+		diasArea, diasSucursal, diasGeneral : entero;
+PROCESO
+	ABRIR E/ (arch);
+	ABRIR /S (sal);
+	
+	LEER(arch, r);
+	totalGeneral := 0; totArea := 0; totSucursal := 0; diasInactivo := 0;
+	diasArea := 0; diasSucursal := 0; diasGeneral := 0;
+	resArea := r.clave.area;
+	resSucursal := r.clave.sucursal;
+	MIENTRAS NFDA(arch) HACER
+		SI (resSucursal <> r.clave.sucursal) ENTONCES
+			Corte_Sucursal();
+		SINO
+			SI (resArea <> r.clave.area) ENTONCES
+				Corte_Area();
+			FIN_SI
+		FIN_SI
+		diasInactivo := diff_fecha(fecha_actual(), r.f_ultimo_log);
+		SI (diasInactivo > 50) ENTONCES
+			totArea := totArea + 1;
+			diasArea := diasArea + diasInactivo;
+		FIN_SI
+		LEER(arch, r);
+	FIN_MIENTRAS
+	Corte_Sucursal();
+	ESCRIBIR('El total de usuarios inactivos es ', totalGeneral);
+	ESCRIBIR('El total de dias inactivos es ', diasGeneral);
+	ESCRIBIR('Con un promedio de ', (diasGeneral DIV totalGeneral));
+	
+	CERRAR(sal);
+	CERRAR(arch);
+FIN_ACCION. 
