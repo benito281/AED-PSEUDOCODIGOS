@@ -1,0 +1,136 @@
+Ciclo excluyente
+
+ACCION 2.2.16 ES
+    AMBIENTE
+        fecha = REGISTRO
+            dd : 01..31
+            mm : 01..12
+            aa : N(4)
+        FIN_REGISTRO
+        
+        pelicula = REGISTRO
+            nro_pelicula : entero
+            titulo : AN(150)
+            genero : AN(60)
+            cant_copias : entero
+            f : fecha
+        FIN_REGISTRO
+
+        peliculas_nuevas, peliculas, totales : archivo de pelicula ordenado por nro_pelicula;
+        p, p_nueva : pelicula;
+        total_peliculas : entero;
+PROCESO
+    ABRIR E/ (peliculas_nuevas);
+    ABRIR E/ (peliculas);
+    ABRIR S/ (totales);
+    LEER(peliculas_nuevas, p_nueva);
+    LEER(peliculas, p);
+    total_peliculas = 0;
+
+    MIENTRAS (NFDA(peliculas_nuevas) Y NFDA(peliculas)) HACER
+        SI (p_nueva.nro_pelicula < p.nro_pelicula) ENTONCES
+            GRABAR(totales, p_nueva);
+            LEER(peliculas_nuevas, p_nueva);    
+            total_peliculas = total_peliculas + 1;
+        SINO
+            SI (p.nro_pelicula < p_nueva.nro_pelicula) ENTONCES
+                GRABAR(totales, p);
+                LEER(peliculas, p);
+                total_peliculas = total_peliculas + 1;
+            SINO
+                // Si son iguales, sumo las copias y escribo una sola entrada
+                p.cant_copias = p.cant_copias + p_nueva.cant_copias;
+                ESCRIBIR(totales, p);
+                total_peliculas = total_peliculas + 1;
+                LEER(peliculas, p);
+                LEER(peliculas_nuevas, p_nueva);
+            FIN_SI
+        FIN_SI
+    FIN_MIENTRAS
+
+    MIENTRAS (NFDA(peliculas_nuevas)) HACER
+            GRABAR(totales, p_nueva);
+            total_peliculas = total_peliculas + 1;
+            LEER(peliculas_nuevas, p_nueva);
+    FIN_MIENTRAS
+    
+    MIENTRAS (NFDA(peliculas)) HACER
+            GRABAR(totales, p);
+            total_peliculas = total_peliculas + 1;
+            LEER(peliculas, p);
+    FIN_MIENTRAS
+
+    CERRAR(totales);
+    CERRAR(peliculas);
+    CERRAR(peliculas_nuevas);
+FIN_ACCION.
+
+=========================================================================================================================
+Ciclo incluyente
+
+ACCION 2.2.16 ES
+    AMBIENTE
+        fecha = REGISTRO
+            dd : 01..31
+            mm : 01..12
+            aa : N(4)
+        FIN_REGISTRO
+        
+        pelicula = REGISTRO
+            nro_pelicula : entero
+            titulo : AN(150)
+            genero : AN(60)
+            cant_copias : entero
+            f : fecha
+        FIN_REGISTRO
+
+        peliculas_nuevas, peliculas, totales : archivo de pelicula ordenado por nro_pelicula;
+        p, p_nueva : pelicula;
+        total_peliculas : entero;
+
+        PROCEDIMIENTO LeerPeliculas() ES
+            LEER(peliculas, p);
+            SI (FDA(peliculas)) ENTONCES
+                p.nro_pelicula := HV; // Valor alto (HV) para indicar fin de archivo
+            FIN_SI
+        FIN_PROCEDIMIENTO
+
+        PROCEDIMIENTO LeerPeliculasNuevas() ES
+            LEER(peliculas_nuevas, p_nueva);
+            SI (FDA(peliculas_nuevas)) ENTONCES
+                p_nueva.nro_pelicula := HV; // Valor alto (HV) para indicar fin de archivo
+            FIN_SI
+        FIN_PROCEDIMIENTO
+PROCESO
+    ABRIR E/ (peliculas_nuevas);
+    ABRIR E/ (peliculas);
+    ABRIR S/ (totales);
+    LEER(peliculas_nuevas, p_nueva);
+    LEER(peliculas, p);
+    total_peliculas = 0;
+
+    MIENTRAS (p_nueva.nro_pelicula <> HV O p.nro_pelicula <> HV) HACER
+        SI (p_nueva.nro_pelicula < p.nro_pelicula) ENTONCES
+            GRABAR(totales, p_nueva);
+            LeerPeliculasNuevas();
+            total_peliculas = total_peliculas + 1;
+        SINO
+            SI (p.nro_pelicula < p_nueva.nro_pelicula) ENTONCES
+                GRABAR(totales, p);
+                total_peliculas = total_peliculas + 1;
+                LeerPeliculas();
+            SINO
+                GRABAR(totales, p);
+                total_peliculas = total_peliculas + 1;
+                LeerPeliculas();
+                LeerPeliculasNuevas();
+            FIN_SI
+        FIN_SI
+    FIN_MIENTRAS
+
+    CERRAR(totales);
+    CERRAR(peliculas);
+    CERRAR(peliculas_nuevas);
+FIN_ACCION.
+
+
